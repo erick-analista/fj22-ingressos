@@ -3,6 +3,7 @@ package br.com.caelum.ingresso.validation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import br.com.caelum.ingresso.model.Sessao;
 
@@ -16,7 +17,7 @@ public class GerenciadorDeSessao {
 	private boolean horarioIsConflitante(Sessao sessaoExistente, Sessao sessaoNova){
 		LocalDate hoje = LocalDate.now();
 		
-		LocalDate horarioSessaoExistente = sessaoExistente.getHorario().atDate(hoje);
+		LocalDateTime horarioSessaoExistente = sessaoExistente.getHorario().atDate(hoje);
 		LocalDateTime horarioSessaoNova = sessaoNova.getHorario().atDate(hoje);
 		
 		boolean terminaAntes = sessaoNova.getHorarioTermino()
@@ -32,6 +33,7 @@ public class GerenciadorDeSessao {
 	}
 	
 	public boolean cabe(Sessao sessaoNova){
+		Stream<Sessao> stream = sessoesDaSala.stream();
 		return sessoesDaSala.stream().noneMatch(sessaoExistente ->
 										horarioIsConflitante(sessaoExistente, sessaoNova)
 										);

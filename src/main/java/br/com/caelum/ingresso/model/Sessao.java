@@ -1,7 +1,13 @@
 package br.com.caelum.ingresso.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Sessao {
@@ -9,7 +15,7 @@ public class Sessao {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private LocalDateTime horario;
+	private LocalTime horario;
 	
 	@ManyToOne
 	private Sala sala;
@@ -24,13 +30,14 @@ public class Sessao {
 	/**
 	 * @dprecated hibernate only	
 	 */
-	public Sessao(LocalDateTime horario, Filme filme, Sala sala){
+	public Sessao(LocalTime horario, Filme filme, Sala sala){
 		this.horario = horario;
 		this.filme = filme;
 		this.sala = sala;
 	}
 	public LocalDateTime getHorarioTermino(){
-		return this.horario.plusMinutes(filme.getDuracao().toMinutes());
+		LocalDate hoje = LocalDate.now();
+		return this.horario.plusMinutes(filme.getDuracao().toMinutes()).atDate(hoje);
 	}
 	public Integer getId() {
 		return id;
@@ -38,10 +45,10 @@ public class Sessao {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public LocalDateTime getHorario() {
+	public LocalTime getHorario() {
 		return horario;
 	}
-	public void setHorario(LocalDateTime horario) {
+	public void setHorario(LocalTime horario) {
 		this.horario = horario;
 	}
 	public Sala getSala() {
